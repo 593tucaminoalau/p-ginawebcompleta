@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>593 TucaminoalaU — Versión Móvil</title>
+  <meta name="description" content="Descubre si estás listo para el examen de ingreso a la universidad en Ecuador. Versión Móvil." />
+  
+  <style>
+    /* =========================================
+       1. VARIABLES Y RESET (Base de tu estilo)
+       ========================================= */
+    :root {
+      --accent: #ff5722;
+      --box-accent: #7C9959;
+      --brown: #66280a;
+      --bg: #ffffff;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --radius: 15px;
+      --shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      background: var(--bg); 
+      color: var(--text); 
+      line-height: 1.6;
+      font-size: 16px; 
+      padding-bottom: 80px; /* Espacio para botón WhatsApp */
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul, ol { list-style: none; }
+    img, iframe { max-width: 100%; display: block; }
+    
+    .container { padding: 0 20px; width: 100%; }
+
+    /* =========================================
+       2. HEADER Y NAVEGACIÓN
+       ========================================= */
+    header { 
+      background: linear-gradient(90deg, var(--accent), #ff7043); 
+      color: white; 
+      position: sticky; top: 0; z-index: 1000; 
+      padding: 10px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .logo-img { height: 50px; width: auto; }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-name { font-weight: 900; font-size: 1.1rem; line-height: 1; }
+    .brand-subtitle { font-size: 0.75rem; opacity: 0.9; }
+
+    /* Menú Hamburguesa */
+    .menu-toggle {
+      background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; gap: 5px;
+      width: 30px; padding: 5px;
+    }
+    .menu-toggle span {
+      display: block; width: 100%; height: 3px; 
+      background: white; border-radius: 2px; transition: 0.3s;
+    }
+    
+    /* Menú Desplegable */
+    nav {
+      position: fixed; top: 70px; left: 0; width: 100%;
+      background: white; color: var(--text);
+      transform: translateY(-150%); transition: transform 0.3s ease-in-out;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      z-index: 999;
+      padding: 10px 0;
+    }
+    nav.active { transform: translateY(0); }
+    
+    nav a {
+      display: block; padding: 15px 20px;
+      font-weight: 700; font-size: 1rem;
+      border-bottom: 1px solid #eee;
+      color: var(--brown);
+    }
+
+    /* =========================================
+       3. COMPONENTES COMUNES (Botones, Cajas)
+       ========================================= */
+    .btn {
+      display: block; width: 100%; text-align: center;
+      background: var(--box-accent); color: white;
+      padding: 15px; border-radius: 50px;
+      font-weight: 800; font-size: 1.1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin: 10px 0; border: none; cursor: pointer;
+    }
+    .btn-naranja { background: var(--accent) !important; }
+    .btn-grande { font-size: 1.2rem; padding: 18px; }
+
+    h1 { font-size: 1.8rem; font-weight: 900; color: var(--brown); margin-bottom: 15px; text-align: center; line-height: 1.2; }
+    h2 { font-size: 1.5rem; color: var(--accent); margin-bottom: 15px; font-weight: 800; text-align: center; }
+    h3 { font-size: 1.2rem; color: var(--brown); margin-bottom: 10px; font-weight: 700; }
+
+    section { padding: 30px 0; border-bottom: 1px solid #f0f0f0; }
+
+    /* =========================================
+       4. ESTILOS ESPECÍFICOS POR SECCIÓN
+       ========================================= */
+    
+    /* Hero */
+    .subtitle-box {
+      background: #FFFF00; color: black; /* Amarillo fiel al original */
+      padding: 20px; border-radius: 10px;
+      font-size: 1rem; font-weight: 900; text-align: justify;
+      margin-bottom: 20px; text-transform: uppercase;
+      box-shadow: var(--shadow);
+    }
+    .video-container {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: var(--radius); margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+    /* Beneficios y Logos */
+    .beneficio-card {
+      display: flex; align-items: flex-start; gap: 15px;
+      background: white; padding: 15px;
+      border-radius: 10px; margin-bottom: 10px;
+      border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .beneficio-card .emoji { font-size: 1.4rem; flex-shrink: 0; }
+    .beneficio-card p { font-size: 0.95rem; margin: 0; line-height: 1.4; }
+
+    .logos-universidades-mini {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+      margin: 20px 0; padding: 10px; background: #f9f9f9; border-radius: 10px;
+    }
+    .logos-universidades-mini img { height: 35px; width: auto; object-fit: contain; }
+
+    .info-alerta-box {
+      background: #fff3cd; border-left: 5px solid #ffc107;
+      padding: 20px; border-radius: 10px; margin-top: 20px;
+      display: flex; gap: 15px; align-items: center;
+    }
+    .emoji-alerta { font-size: 2rem; }
+
+    /* Cards Evaluación y Metodología */
+    .card-personalizada {
+      background: white; border: 1px solid #e2e8f0; border-radius: 15px;
+      overflow: hidden; margin-bottom: 25px; box-shadow: var(--shadow);
+    }
+    .header-caja {
+      background: var(--brown); color: white;
+      padding: 15px; font-weight: 800; text-align: center;
+      text-transform: uppercase; font-size: 1rem;
+    }
+    .body-negro { padding: 20px; } /* Mantenemos el nombre de clase aunque el fondo sea blanco/claro en tu CSS original */
+    
+    .lista-emojis li, .lista-numerada-blanca li {
+      margin-bottom: 15px; position: relative; padding-left: 0; 
+      display: flex; gap: 10px; text-align: justify; font-size: 0.95rem;
+    }
+    .lista-numerada-blanca { counter-reset: step; }
+    .lista-numerada-blanca li { align-items: flex-start; }
+    .lista-numerada-blanca li::before {
+      counter-increment: step; content: counter(step) ".";
+      font-weight: 900; color: var(--accent); flex-shrink: 0;
+    }
+
+    .caja-blanca-metodos {
+      background: var(--accent); color: white;
+      padding: 10px; text-align: center; font-weight: 800;
+      border-radius: 8px; margin-top: 15px; text-transform: uppercase;
+    }
+
+    /* Pagos */
+    .logos-pago-fila {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;
+      margin: 20px 0;
+    }
+    .logos-pago-fila img { height: 35px; object-fit: contain; }
+
+    .pago-instrucciones {
+      background: #fffbe6; border: 2px solid var(--brown);
+      padding: 25px 15px; border-radius: 15px; text-align: center;
+      position: relative; margin: 30px 10px;
+    }
+    .esquina-alerta {
+      position: absolute; top: -20px; width: 40px; height: 40px;
+      background: white; border: 2px solid var(--brown);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .izquierda { left: -10px; }
+    .derecha { right: -10px; transform: scaleX(-1); }
+
+    /* Contador */
+    .countdown-wrapper {
+      border: 2px solid #333; border-radius: 15px; padding: 15px;
+      text-align: center; margin-top: 20px; background: #f8f9fa;
+    }
+    .countdown-reloj { display: flex; justify-content: space-around; }
+    .tiempo-unidad span { font-size: 1.5rem; font-weight: 900; color: var(--accent); display: block; line-height: 1; }
+    .tiempo-unidad p { font-size: 0.7rem; text-transform: uppercase; margin: 0; }
+
+    /* FAQ */
+    .faq-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; overflow: hidden; background: white; }
+    .faq-btn {
+      width: 100%; padding: 15px; background: none; border: none;
+      text-align: left; font-weight: 700; display: flex; justify-content: space-between;
+      align-items: center; font-size: 1rem; color: #333;
+    }
+    .faq-content { display: none; padding: 0 15px 15px 15px; font-size: 0.95rem; text-align: justify; color: #444; }
+    .faq-item.active .faq-content { display: block; }
+    .faq-item.active .faq-btn { color: var(--accent); }
+    .plus { font-size: 1.5rem; color: var(--accent); }
+
+    /* =========================================
+       5. VISTAS SPA (SIMULADORES, QUIENES, ETC)
+       ========================================= */
+    .view-section { display: none; padding-top: 20px; }
+    .view-section.active { display: block; }
+
+    /* Grid Universidades (Fiel al original) */
+    .card-uni {
+      background: white; padding: 20px; border: 1px solid #eee;
+      border-radius: 15px; margin-bottom: 20px; text-align: center;
+      box-shadow: var(--shadow); position: relative;
+    }
+    .card-uni img { height: 70px; margin: 0 auto 10px; object-fit: contain; }
+    .card-uni h3 { font-size: 1.1rem; min-height: 2.5em; display: flex; align-items: center; justify-content: center; }
+    .card-uni .precio { font-size: 1.2rem; font-weight: 800; color: var(--text); margin: 5px 0; }
+    .badge-popular {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--accent); color: white; font-size: 0.7rem;
+      padding: 3px 8px; border-radius: 10px; font-weight: bold;
+    }
+
+    /* Quiénes Somos (Estilos Fieles) */
+    .mission-banner {
+      background: #0f172a; color: white; padding: 30px 20px; text-align: center; margin-bottom: 20px; border-radius: 10px;
+    }
+    .about-card {
+      background: white; padding: 25px; border-radius: 15px; margin-bottom: 20px;
+      border-left: 5px solid var(--accent); box-shadow: var(--shadow);
+    }
+    .value-item { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: #fff8f5; padding: 10px; border-radius: 10px; }
+    .value-emoji { font-size: 2rem; }
+
+    /* Trabaja Formulario */
+    .form-group-premium { margin-bottom: 15px; }
+    .form-group-premium label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 0.9rem; }
+    .form-group-premium input, .form-group-premium select {
+      width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px;
+    }
+
+    /* WhatsApp Flotante */
+    .whatsapp-btn {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 60px; height: 60px; background: #25d366;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000;
+    }
+    .whatsapp-btn img { width: 35px; height: 35px; }
+
+    /* Footer */
+    footer { background: #1a1a1a; color: #888; text-align: center; padding: 30px 20px; font-size: 0.85rem; margin-top: 30px; border-top: 5px solid var(--accent); }
+    footer .brand-f { color: var(--accent); font-weight: bold; font-size: 1.1rem; text-transform: uppercase; }
+
+
+    /* =CORRECCIÓN LISTA METODOLOGÍA= */
+.lista-numerada-blanca li {
+  display: block !important;       /* Desactiva el modo columnas (flex) */
+  padding-left: 25px;              /* Espacio a la izquierda para el número */
+  position: relative;              /* Necesario para ubicar el número */
+  text-align: left;                /* En móvil se lee mejor a la izquierda que justificado */
+  line-height: 1.5;                /* Mejor espaciado entre líneas */
+}
+
+.lista-numerada-blanca li::before {
+  position: absolute;              /* Saca el número del flujo del texto */
+  left: 0;                         /* Lo pega a la izquierda absoluta */
+  top: 0;
+  /* Mantenemos tus estilos originales del contador abajo */
+  counter-increment: step;
+  content: counter(step) ".";
+  font-weight: 900;
+  color: var(--accent);
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav-inner">
+      <div class="brand">
+        <img src="imagenes/logo3.png" alt="Logo" class="logo-img">
+        <div class="brand-text">
+          <span class="brand-name">593 TucaminoalaU</span>
+          <span class="brand-subtitle">Capacitación a tu alcance</span>
+        </div>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav id="mobileNav">
+    <div class="container">
+      <a href="#" onclick="navTo('main'); return false;">Inicio</a>
+      <a href="#simuladores" onclick="navTo('simuladores'); return false;">Simuladores 2026</a>
+      <a href="#quienes-somos" onclick="navTo('quienes'); return false;">¿Quiénes Somos?</a>
+      <a href="#trabaja-con-nosotros" onclick="navTo('trabaja'); return false;">Trabaja con Nosotros</a>
+      <a href="#test-vocacional" onclick="navTo('test'); return false;">Test Vocacional</a>
+    </div>
+  </nav>
+
+  <div id="main-view" class="view-section active">
+    <div class="container">
+      
+      <section style="border:none;">
+        <h1>Asegura tu ingreso a la universidad 2026, con el simulador más real de Ecuador</h1>
+        
+        <div class="subtitle-box">
+          MIDE TU PUNTAJE, DOMINA EL CRONÓMETRO Y DESCUBRE QUÉ TEMAS DEBES REFORZAR ANTES DEL EXÁMEN OFICIAL
+        </div>
+
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/Udqhd2M_b4I" title="Video Promocional" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <a href="https://wa.me/593962050763?text=Hola!%20Deseo%20probar%20el%20simulador%20gratuito.%20Ayúdeme%20por%20favor" target="_blank" class="btn btn-naranja btn-grande">PROBAR SIMULADOR GRATIS</a>
+      </section>
+
+      <section>
+        <div class="beneficio-card"><span class="emoji">✅</span><p><strong>Simuladores Reales:</strong> Preguntas actualizadas por universidad (UCE, UG, UTN, UPEC, EPN, ESPE, UNACH, UTC, ESPOL y más).</p></div>
+        
+        <div class="logos-universidades-mini">
+          <img src="imagenes/logo-uce.png" alt="UCE">
+          <img src="imagenes/logo-uguaya.png" alt="UG">
+          <img src="imagenes/logo-espe.png" alt="ESPE">
+          <img src="imagenes/logo-utc.png" alt="UTC">
+          <img src="imagenes/logo-upec.png" alt="UPEC">
+          <img src="imagenes/logo-espol.png" alt="ESPOL">
+          <img src="imagenes/logo-utn.png" alt="UTN">
+          <img src="imagenes/logo-epn.png" alt="EPN">
+          <img src="imagenes/logo-uta.jpeg" alt="UTA">
+          <img src="imagenes/logo-unach.jpg" alt="UNACH">
+          <img src="imagenes/logo-uitey.png" alt="UITEY">
+        </div>
+
+        <div class="beneficio-card"><span class="emoji">✅</span><p><strong>Cronómetro Oficial:</strong> Practica con el tiempo límite real del examen.</p></div>
+        <div class="beneficio-card"><span class="emoji">✅</span><p><strong>Diagnóstico de Fallos:</strong> Descubre qué temas te faltan reforzar. No pierdes tiempo estudiando lo que ya sabes.</p></div>
+        <div class="beneficio-card"><span class="emoji">✅</span><p><strong>Acceso Inmediato:</strong> Pagas hoy y activas hoy (Deuna!, Depósito o Transferencia).</p></div>
+
+        <div class="info-alerta-box">
+          <span class="emoji-alerta">⚠️</span>
+          <p>Los cupos para las universidades son limitados. <strong>No esperes a que se publique la fecha del examen para empezar</strong>; los estudiantes que practican con 8 semanas de anticipación tienen un <strong>80% más de probabilidad</strong> de obtener cupo.</p>
+        </div>
+
+        <h2 style="margin-top:20px; color:var(--brown)">¿Listo para empezar?</h2>
+        <a href="#simuladores" onclick="navTo('simuladores')" class="btn btn-naranja btn-grande">COMPRAR SIMULADORES</a>
+      </section>
+
+      <section style="text-align:center;">
+        <p style="font-size:1.5rem; font-weight:700; color:var(--brown);">¿Dudas? Haz una prueba rápida de diez preguntas ahora mismo.</p>
+        <a href="https://wa.me/593962050763?text=Hola!%20Deseo%20probar%20el%20simulador%20gratuito" target="_blank" class="btn btn-naranja">PROBAR SIMULADOR GRATIS</a>
+      </section>
+
+      <section>
+        <div class="card-personalizada">
+          <div class="header-caja">CARACTERÍSTICAS DE NUESTROS SIMULADORES</div>
+          <div class="body-negro">
+            <ul class="lista-emojis">
+              <li><span>🏫</span> Específicos para cada universidad, toman en cuenta los criterios de cada institución.</li>
+              <li><span>🕵️‍♀️</span> Validados al 100%.</li>
+              <li><span>🆕</span> Actualizados.</li>
+              <li><span>💎</span> Contienen un número de ejercicios específico (20, 50, 60 o 150).</li>
+              <li><span>📝</span> Proporcionan: calificación sobre 1000 puntos, porcentaje de aciertos, lista con el estado de tus respuestas, solucionario paso a paso en pdf de todas las preguntas y un informe detallado de los temas específicos que debes estudiar.</li>
+            </ul>
+            <div class="caja-blanca-metodos">NO MÁS MÉTODOS ABURRIDOS</div>
+          </div>
+        </div>
+
+        <h3 style="text-align:center;">¿CÓMO USAR NUESTROS SIMULADORES?</h3>
+        <div class="video-container">
+           <iframe src="https://www.youtube.com/embed/E3vOevJMpno" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <img src="imagenes/estudiantes-colaborando.png" style="border-radius:15px; margin-bottom:25px;" alt="Estudiantes">
+
+        <div class="card-personalizada">
+          <div class="header-caja">NUESTRA METODOLOGÍA: RUTA AL CUPO</div>
+          <div class="body-negro">
+            <ol class="lista-numerada-blanca">
+              <li><strong>Diagnóstico realista:</strong> Diagnóstico realista: empezamos midiendo tu nivel actual con un simulador de entrada.</li>
+              <li><strong>Optimización de contenidos:</strong> Identificamos tus vacíos o deficiencias académicas desde el primer momento. No pierdes tiempo estudiando lo que ya sabes.</li>
+              <li><strong>Entrenamiento segmentado:</strong> aplicas simuladores por temas, dominas cada área por separado antes de ir al exámen general.</li>
+              <li><strong>Simulación de alta presión:</strong> el paso final. Aplica simulacro con el mismo tiempo, número de preguntas y dificultad del exámen real de la U, vas al exámen con la confianza de quien ya lo hizo.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section style="text-align:center;">
+        <h3 style="font-size:1.8rem; text-transform:uppercase;">MÉTODOS DE PAGO</h3>
+        <div class="logos-pago-fila">
+          <img src="imagenes/de-una.png"><img src="imagenes/pichincha-vecino.png"><img src="imagenes/banco-pichincha.png">
+          <img src="imagenes/banco-guayaquil.png"><img src="imagenes/banco-pacifico.png"><img src="imagenes/produbanco.png">
+        </div>
+
+        <div class="pago-instrucciones">
+          <div class="esquina-alerta izquierda">😉</div>
+          <div class="esquina-alerta derecha">😉</div>
+          <p style="color:var(--brown); font-weight:700;">Paga mediante <strong>depósito o transferencia</strong> y envía el comprobante por WhatsApp para activación inmediata</p>
+        </div>
+
+        <a href="#simuladores" onclick="navTo('simuladores')" class="btn btn-naranja btn-grande">COMPRAR SIMULADORES</a>
+
+        <div class="countdown-wrapper">
+           <span style="font-weight:800; text-transform:uppercase;">Días restantes para el examen</span>
+           <div class="countdown-reloj" id="countdown">
+             <div class="tiempo-unidad"><span id="days">00</span><p>Días</p></div>
+             <div class="tiempo-unidad"><span id="hours">00</span><p>Horas</p></div>
+             <div class="tiempo-unidad"><span id="minutes">00</span><p>Min</p></div>
+             <div class="tiempo-unidad"><span id="seconds">00</span><p>Seg</p></div>
+           </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Preguntas Frecuentes</h2>
+        <div id="faq-container">
+          <div class="faq-item">
+            <button class="faq-btn">¿Las preguntas del simulador son iguales a las del examen real? <span class="plus">+</span></button>
+            <div class="faq-content">Trabajamos con bancos de preguntas actualizados basados en los temarios oficiales de cada universidad (EPN, ESPOL, ESPE, UCE, UTN, UITEY, etc.). Si bien las preguntas exactas cambian en cada proceso, la estructura, el nivel de dificultad y los temas son idénticos a los que enfrentarás el día del examen. ¡Es la práctica más cercana a la realidad!</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn">¿Para qué universidades sirven los simuladores? <span class="plus">+</span></button>
+            <div class="faq-content">Tenemos simuladores específicos para las principales universidades públicas del Ecuador que gestionan su propio proceso, así como para los procesos asistidos. Puedes elegir el pack de la universidad a la que aspiras para asegurar que estudias lo que realmente te van a tomar.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn">¿Cómo recibo el acceso después de pagar? <span class="plus">+</span></button>
+            <div class="faq-content">Tras recibir el comprobante de pago vía WhatsApp se te enviará un enlace de acceso al simulador junto con un usuario y una contraseña.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn">¿Puedo usar el simulador desde mi dispositivo movil? <span class="plus">+</span></button>
+            <div class="faq-content">No. En las universidades que aplican el examen de forma virtual, este se rinde desde una computadora; por ello, el simulador está diseñado para funcionar únicamente en equipos de escritorio o laptops</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn">Después de adquirir un simulador, ¿cuántas veces puedo usarlo? <span class="plus">+</span></button>
+            <div class="faq-content">El simulador puede realizarse un máximo de dos ocasiones. Cada usuario dispone de dos intentos.</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn">¿Es seguro mi pago? <span class="plus">+</span></button>
+            <div class="faq-content">Sí, todos los pagos son en cuentas bancarias formales (Pichincha, Guayaquil, Pacífico, Produbanco).</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="simuladores-view" class="view-section container">
+    <h1>Elige tu Universidad</h1>
+    <p style="text-align:center;">Selecciona la universidad de tu interés para adquirir tu simulador.</p>
+    <p style="text-align:center;"></p>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-upec.png" alt="UPEC">
+      <h3>U. POLITÉCNICA ESTATAL DEL CARCHI</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $9.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UPEC" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-uitey.png" alt="UITEY">
+      <h3>U. TECNOLOGÍA EXPERIMENTAL YACHAY</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $14.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20YACHAY" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-utn.png" alt="UTN">
+      <h3>UNIVERSIDAD TÉCNICA DEL NORTE</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $11.00</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;">Exclusivo Facultad Ciencias de la Salud.</p>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UTN" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <div class="badge-popular">MÁS BUSCADO</div>
+      <img src="imagenes/logo-uce.png" alt="UCE">
+      <h3>UNIVERSIDAD CENTRAL DEL ECUADOR</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $19.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UCE" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-epn.png" alt="EPN">
+      <h3>ESCUELA POLITÉCNICA NACIONAL</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $9.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20EPN" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-espe.png" alt="ESPE">
+      <h3>UNIVERSIDAD DE LAS FUERZAS ARMADAS</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $11.00</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;">Simuladores exclusivos para carreras del Grupo 2: Ciencias Humanas y Servicios</p>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20ESPE" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-utc.png" alt="UTC">
+      <h3>UNIVERSIDAD TÉCNICA DE COTOPAXI</h3>
+      <div class="precio">Evaluación: $9.99</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;">1 simulador de aptitudes + 3 simuladores de conocimientos</p>
+      <div class="precio">Simulacro: $14.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UTC" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-uta.jpeg" alt="UTA">
+      <h3>UNIVERSIDAD TÉCNICA DE AMBATO</h3>
+      <div class="precio">Evaluación: $4.99</div>
+      <div class="precio">Simulacro: $9.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UTA" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-unach.jpg" alt="UNACH">
+      <h3>UNIVERSIDAD NACIONAL DE CHIMBORAZO</h3>
+      <div class="precio">Evaluación: $6.99</div>
+      <div class="precio">Simulacro: $9.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UNACH" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-uleam.png" alt="ULEAM">
+      <h3>U. LAICA ELOY ALFARO DE MANABÍ</h3>
+      <div class="precio">Evaluación: $9.99</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;"> Simuladores exclusivos para:</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Salud y Bienestar.</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Administración.</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Ciencias Naturales, TIC´s, Ingeniería, Agropecauria.</p>
+      <div class="precio">Simulacro: $14.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20ULEAM" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-uguaya.png" alt="UG">
+      <h3>UNIVERSIDAD DE GUAYAQUIL</h3>
+      <div class="precio">Evaluación: $7.50</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;"> Simuladores exclusivos para:</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Ciencia, Tecnología e Ingeniería.</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Ciencias de la Bioindustria y Recursos Naturales.</p>
+      <p style="font-size:0.85rem; margin-bottom:10px;">- Ciencias de la Salud Humana</p>
+      <div class="precio">Simulacro: $14.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20UG" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <div class="card-uni">
+      <img src="imagenes/logo-espol.png" alt="ESPOL">
+      <h3>ESCUELA SUPERIOR POLITÉCNICA DEL LITORAL</h3>
+      <div class="precio">Evaluación: $9.99</div>
+      <p style="font-size:0.85rem; margin-bottom:10px;">1 simulador de aptitudes + 3 simuladores de conocimientos</p>
+      <div class="precio">Simulacro: $14.99</div>
+      <a href="https://wa.me/593962050763?text=Deseo%20comprar%20simulador%20ESPOL" class="btn btn-naranja">COMPRAR</a>
+    </div>
+
+    <button onclick="navTo('main')" class="btn" style="background:#ddd; color:#333;">« Volver al Inicio</button>
+  </div>
+
+  <div id="quienes-view" class="view-section container">
+    <div class="mission-banner">
+      <h2>Transformamos la educación mediante la innovación</h2>
+    </div>
+
+    <div class="about-card">
+      <h1 style="text-align:left;">¿QUIÉNES SOMOS?</h1>
+      <p style="text-align:justify;">Somos un grupo de jóvenes profesionales multidisciplinarios, comprometidos y alineados con tus objeivos académicos, que conocemos la preocupación y la ansiedad que sienten los estudiantes previo a dar el exámen de admisión y sabemos que el ingreso a la universidad pública está cada vez más difícil. Un solo punto puede ser la diferencia entre obtener el cupo para medicina, enfermería, ingeniería o derecho... o quedarse fuera un semestre más. Por eso hemos diseñado esta plataforma online que integra una metodología que valora lo aprendido en el colegio y confía en las capacidades de nuestros estudiantes.</p>
+    </div>
+
+    <div class="about-card">
+      <h2>Te entendemos perfectamente</h2>
+      <p style="text-align:justify;">Queremos acompañarlos en este proceso para orientarlos mejor, motivarlos y hacer que su estudio sea efectivo. Si aplicas nuestra medología de preparación, vas a obtener tu cupo en la universidad y carrera que deseas.</p>
+    </div>
+
+    <img src="imagenes/equipo-joven.jpg" style="border-radius:15px; margin-bottom:20px;">
+    <img src="imagenes/estudiante-concentrado.jpg" style="border-radius:15px; margin-bottom:20px;">
+
+    <div class="about-card">
+      <h2 style="color:var(--text);">Poseemos:</h2>
+      <div class="value-item"><span class="value-emoji">🧠</span> <strong>Conocimientos</strong></div>
+      <div class="value-item"><span class="value-emoji">🤝</span> <strong>Compromiso</strong></div>
+      <div class="value-item"><span class="value-emoji">❤️</span> <strong>Empatía</strong></div>
+      <div class="value-item"><span class="value-emoji">💸</span> <strong>Conciencia económica</strong></div>
+    </div>
+    
+    <button onclick="navTo('main')" class="btn" style="background:#ddd; color:#333;">« Volver al Inicio</button>
+  </div>
+
+  <div id="trabaja-view" class="view-section container">
+    <h1>Trabaja con Nosotros</h1>
+    
+    <div style="background:white; padding:20px; border-radius:15px; border:1px solid #ddd; margin-bottom:20px;">
+      <p><strong>1.</strong> ¿Eres un profesional con sólidos conocimientos académicos? 🧑‍🎓</p>
+      <hr style="margin:10px 0; border:0; border-top:1px solid #eee;">
+      <p><strong>2.</strong> ¿Trabajas como profesor de bachillerato? 👨‍🏫</p>
+      <hr style="margin:10px 0; border:0; border-top:1px solid #eee;">
+      <p><strong>3.</strong> ¿Tienes aptitud para las ventas? 🤑</p>
+    </div>
+
+    <div style="background:white; padding:20px; border-radius:15px; border:2px solid var(--brown);">
+      <h2 style="color:#222;">CONTÁCTANOS</h2>
+      <p style="text-align:center; color:#666; margin-bottom:20px;">Responde el siguiente formulario.</p>
+
+      <form action="https://formsubmit.co/sebastianneto84@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Postulación Móvil">
+        <input type="hidden" name="_captcha" value="false">
+
+        <div class="form-group-premium">
+          <label>MI PERFIL ES:</label>
+          <select id="perfil-usuario" name="Categoría" onchange="actualizarCampos()" required>
+            <option value="" disabled selected>-- Elige una opción --</option>
+            <option value="profesional">1. Profesional Académico</option>
+            <option value="profesor">2. Profesor de Bachillerato</option>
+            <option value="vendedor">3. Interesado en Ventas</option>
+          </select>
+        </div>
+
+        <div id="campos-dinamicos" style="display:none;">
+          <div class="form-group-premium">
+            <label>Nombres y Apellidos</label>
+            <input type="text" name="Nombres Completos" required>
+          </div>
+          
+          <div class="form-group-premium" id="grupo-cedula" style="display:none;">
+            <label>Cédula</label>
+            <input type="text" name="Cédula">
+          </div>
+
+          <div class="form-group-premium">
+            <label>WhatsApp</label>
+            <input type="tel" name="Telefono" required>
+          </div>
+          <div class="form-group-premium">
+             <label>Email</label>
+             <input type="email" name="Email" required>
+          </div>
+
+          <div class="form-group-premium" id="grupo-titulo" style="display:none;">
+            <label>Título de Tercer Nivel</label>
+            <input type="text" name="Título">
+          </div>
+
+          <div class="form-group-premium" id="grupo-institucion" style="display:none;">
+            <label>Institución donde trabaja</label>
+            <input type="text" name="Institución">
+          </div>
+
+          <div class="form-group-premium" id="grupo-vendedor" style="display:none;">
+             <label>Nivel de Instrucción</label>
+             <select name="Instrucción">
+               <option value="bachillerato">Bachillerato</option>
+               <option value="tercer nivel">Tercer Nivel</option>
+             </select>
+             <p style="font-size:0.8rem; color:#d9534f; margin-top:5px;">⚠️ Solo mayores de edad.</p>
+          </div>
+
+          <button type="submit" class="btn btn-naranja">ENVIAR FORMULARIO</button>
+        </div>
+      </form>
+    </div>
+    
+    <button onclick="navTo('main')" class="btn" style="background:#ddd; color:#333; margin-top:20px;">« Volver al Inicio</button>
+  </div>
+
+  <div id="test-view" class="view-section container">
+    <h1 style="color:#AC0000;">¿No estás seguro de qué carrera seguir?</h1>
+    <p style="text-align:center; color:#AC0000; font-weight:bold; font-size:1.2rem; margin-bottom:20px;">Haz este test vocacional gratuito.</p>
+    
+    <div style="width:100%; height:800px; -webkit-overflow-scrolling:touch; overflow-y:scroll; border:1px solid #ddd; border-radius:15px;">
+        <iframe src="testvoc.html" style="width:100%; height:100%; border:none;"></iframe>
+    </div>
+    
+    <button onclick="navTo('main')" class="btn" style="background:#ddd; color:#333; margin-top:20px;">« Volver al Inicio</button>
+  </div>
+
+  <a href="https://wa.me/593962050763" class="whatsapp-btn" target="_blank">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+  </a>
+
+  <footer>
+    <div class="brand-f">593 TucaminoalaU</div>
+    <p>© <span id="year">2026</span> - Todos los derechos reservados.</p>
+    <p>Ibarra, Ecuador</p>
+  </footer>
+
+  <script>
+    // 1. NAVEGACIÓN SPA
+    const sections = {
+      'main': document.getElementById('main-view'),
+      'simuladores': document.getElementById('simuladores-view'),
+      'quienes': document.getElementById('quienes-view'),
+      'trabaja': document.getElementById('trabaja-view'),
+      'test': document.getElementById('test-view')
+    };
+
+    function navTo(key) {
+      // Ocultar todas
+      Object.values(sections).forEach(sec => sec.classList.remove('active'));
+      // Mostrar elegida
+      if(sections[key]) sections[key].classList.add('active');
+      // Scroll arriba
+      window.scrollTo(0, 0);
+      // Cerrar menú móvil
+      document.getElementById('mobileNav').classList.remove('active');
+    }
+
+    // Manejar Hash al cargar (ej: mobile.html#simuladores)
+    window.addEventListener('load', () => {
+      const h = window.location.hash;
+      if(h === '#simuladores') navTo('simuladores');
+      else if(h === '#quienes-somos') navTo('quienes');
+      else if(h === '#trabaja-con-nosotros') navTo('trabaja');
+      else if(h === '#test-vocacional') navTo('test');
+      else navTo('main');
+      
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+    // 2. MENÚ HAMBURGUESA
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('mobileNav').classList.toggle('active');
+    });
+
+    // 3. ACORDEÓN FAQ
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        // Cerrar otros (opcional, pero limpio en móvil)
+        document.querySelectorAll('.faq-item').forEach(i => {
+           if(i !== item) i.classList.remove('active');
+        });
+        item.classList.toggle('active');
+        
+        // Cambiar icono
+        const span = btn.querySelector('.plus');
+        span.textContent = item.classList.contains('active') ? 'x' : '+';
+      });
+    });
+
+    // 4. LÓGICA FORMULARIO TRABAJO (Campos dinámicos)
+    function actualizarCampos() {
+      const perfil = document.getElementById('perfil-usuario').value;
+      const contenedor = document.getElementById('campos-dinamicos');
+      const gCedula = document.getElementById('grupo-cedula');
+      const gTitulo = document.getElementById('grupo-titulo');
+      const gInstitucion = document.getElementById('grupo-institucion');
+      const gVendedor = document.getElementById('grupo-vendedor');
+
+      contenedor.style.display = 'block';
+      
+      // Reset
+      gCedula.style.display = 'none';
+      gTitulo.style.display = 'none';
+      gInstitucion.style.display = 'none';
+      gVendedor.style.display = 'none';
+
+      if (perfil === 'profesional') {
+        gCedula.style.display = 'block';
+        gTitulo.style.display = 'block';
+      } else if (perfil === 'profesor') {
+        gInstitucion.style.display = 'block';
+      } else if (perfil === 'vendedor') {
+        gCedula.style.display = 'block';
+        gVendedor.style.display = 'block';
+      }
+    }
+
+    // 5. CUENTA REGRESIVA
+    const targetDate = new Date('February 1, 2026 09:00:00').getTime(); 
+    setInterval(() => {
+      const now = new Date().getTime();
+      const dist = targetDate - now;
+      if (dist < 0) return;
+
+      document.getElementById('days').innerText = Math.floor(dist / (1000 * 60 * 60 * 24));
+      document.getElementById('hours').innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      document.getElementById('minutes').innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+      document.getElementById('seconds').innerText = Math.floor((dist % (1000 * 60)) / 1000);
+    }, 1000);
+
+
+/* === SCRIPT DE PERSISTENCIA TOTAL (FORZADO) === */
+(function() {
+    // 1. Mapeo de seguridad: Relaciona los nombres de tus enlaces con los IDs de tu código
+    const mapaSecciones = {
+        '#simuladores': 'simuladores',
+        '#quienes-somos': 'quienes',
+        '#trabaja-con-nosotros': 'trabaja',
+        '#test-vocacional': 'test',
+        '': 'main'
+    };
+
+    // 2. Sobrescribimos navTo para que CUALQUIER llamada actualice la URL
+    const originalNavTo = window.navTo;
+    window.navTo = function(key) {
+        // Buscamos el nombre correcto para la URL
+        const hashDestino = Object.keys(mapaSecciones).find(k => mapaSecciones[k] === key) || '';
+        
+        // Forzamos el cambio en la barra de direcciones del navegador
+        if (history.pushState) {
+            history.pushState(null, null, hashDestino || ' ');
+        } else {
+            window.location.hash = hashDestino;
+        }
+
+        // Ejecutamos tu función original para mostrar la sección
+        originalNavTo(key);
+    };
+
+    // 3. Función de Sincronización "Bruta"
+    function forzarCargaSeccion() {
+        const hashActual = window.location.hash;
+        const seccionID = mapaSecciones[hashActual] || 'main';
+        
+        // Ejecutamos la lógica de mostrado directamente
+        if (sections[seccionID]) {
+            Object.values(sections).forEach(s => s.classList.remove('active'));
+            sections[seccionID].classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    }
+
+    // 4. Disparadores: se activa al cargar la página y al usar el botón "Atrás" del móvil
+    window.addEventListener('load', forzarCargaSeccion);
+    window.addEventListener('popstate', forzarCargaSeccion);
+    window.addEventListener('hashchange', forzarCargaSeccion);
+
+    // Ejecución inmediata por si acaso
+    forzarCargaSeccion();
+})();
+    
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

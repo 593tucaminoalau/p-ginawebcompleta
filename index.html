@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido | 593 TucaminoalaU</title>
+    <style>
+        /* Estilos inspirados en tu paleta de colores actual */
+        :root {
+            --accent: #ff5722; /* Naranja de tu marca */
+            --text: #0f172a;
+            --muted: #6b7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .loader-container {
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: var(--muted);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Animación de carga */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left-color: var(--accent);
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader-container">
+        <img src="imagenes/logo3.png" alt="Logo 593 TucaminoalaU" class="logo">
+        
+        <h1>Bienvenido a 593 TucaminoalaU</h1>
+        <p>Redirigiendo, espere un momento por favor...</p>
+        
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        function detectarYRedirigir() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // Lógica de detección: busca cadenas comunes de dispositivos móviles
+            const esMovil = /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+            
+            // Validación adicional por ancho de pantalla (opcional)
+            const esPantallaPequena = window.innerWidth <= 768;
+
+            // Agregamos un pequeño retraso de 1.5 segundos para que el mensaje sea visible
+            setTimeout(() => {
+                if (esMovil || esPantallaPequena) {
+                    window.location.href = "celular.html";
+                } else {
+                    window.location.href = "computador.html";
+                }
+            }, 1500);
+        }
+
+        // Ejecutar la función cuando la página termine de cargar
+        window.onload = detectarYRedirigir;
+    </script>
+</body>
+</html>
